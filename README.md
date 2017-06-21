@@ -22,6 +22,6 @@ YW::getRootPath();
 YW::getFilePath();
 
 
-homepage: http://store.youweb-studio.ru
+homepage: https://store.youweb-studio.ru
 
 contacts: d.goryaev@hotmail.com
