@@ -22,6 +22,15 @@ YW::getRootPath();
 YW::getFilePath();
 
 
+*-
+
+YW::matchAttrValues("&lt;img src='/uploads/asdf.png'&gt;", "src" [, "img"]);
+
+YW::matchHrefs("&lt;a href='/'&gt;&lt;/a&gt;");
+
+YW::redirectArray(array("from"=>"/uploads/asdf/","to"=>"/uploads/2/"));
+
+
 homepage: https://store.youweb-studio.ru
 
 contacts: d.goryaev@hotmail.com

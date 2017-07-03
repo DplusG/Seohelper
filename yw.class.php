@@ -5,12 +5,16 @@
 	*	Вспомагательный класс для работы с сео задачами
 	*
 	*	USAGE: 
+	*	YW::declOfNum($membersCount, ['участник', 'участника', 'участников']);
 	*	YW::getUrl();
 	*	YW::getUrlPart("query");
+	*-	YW::matchAttrValues("<img src='/uploads/asdf.png'>", "src" [, "img"]);
+	*-	YW::matchHrefs("<a href='/'></a>");
 	*	YW::matchSrcImgs("<img src='/uploads/asdf.png'>");
 	*	YW::print_s("/uploads/asdf/");
 	*	YW::print_r( array("/uploads/asdf/", "/uploads/2/") );
 	*	YW::redirect("/uploads/asdf/", "/uploads/2/");
+	*-	YW::redirectArray(array("from"=>"/uploads/asdf/","to"=>"/uploads/2/"));
 	*	YW::getRootPath();
 	*	YW::getFilePath();
 	*	
@@ -21,6 +25,10 @@ class YW {
 	private static $log_file = "log--yw.txt";
 	private $cms = "static";
 
+	public static function declOfNum($number, $titles) {
+        $cases = [2, 0, 1, 1, 1, 2];
+        return $titles[ ($number%100>4 && $number%100<20)? 2 : $cases[($number%10<5)?$number%10:5] ];
+    }
 	public static function getFilePath() {
 		return __DIR__;
 	}
@@ -57,6 +65,28 @@ class YW {
 		$message .= "\n";
 		return file_put_contents( $logfile, $message, FILE_APPEND);
 	}
+	public static function matchAttrValues($content, $attrName, $tag = 'div') {
+		if(!$content) {
+			return false;
+		}
+		
+		$pattern = '<'.$tag.'(.*)'.$attrName.'=["|\'](.*)["|\']>';
+		$subject = $content;
+		preg_match_all($pattern, $subject, $out, PREG_SET_ORDER);
+
+		return $out;
+	}
+	public static function matchHrefs($content) {
+		if(!$content) {
+			return false;
+		}
+		
+		$pattern = '<a(.*)href=["|\'](.*)["|\']>';
+		$subject = $content;
+		preg_match_all($pattern, $subject, $out, PREG_SET_ORDER);
+
+		return $out;
+	}
 	public static function matchSrcImgs($content) {
 		if(!$content) {
 			return false;
@@ -81,6 +111,15 @@ class YW {
 	public static function redirect($old, $new) {
 		if( $old == self::getUrl() ) {
 			header("Location: $new", true, 301);
+		}
+	}
+	public static function redirectArray($arr) {
+		foreach ($arr as $key => $value) {
+			$from = $value['from'];
+			$to = $value['to'];
+			if( $from == self::getUrl() ) {
+				header("Location: $to", true, 301);
+			}
 		}
 	}
 }
